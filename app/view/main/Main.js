@@ -15,7 +15,8 @@ Ext.define('extMap.view.main.Main', {
 
         'extMap.view.main.MainController',
         'extMap.view.main.MainModel',
-        'extMap.view.main.List'
+        'extMap.view.main.List',
+        'extMap.view.muzkatMap.muzkatMap'
     ],
 
     controller: 'main',
@@ -75,7 +76,8 @@ Ext.define('extMap.view.main.Main', {
         }
     },
 
-    items: [{
+    items: [
+        /*{
         title: 'Home',
         iconCls: 'fa-home',
         // The following grid shares a store with the classic version's grid as well!
@@ -100,7 +102,7 @@ Ext.define('extMap.view.main.Main', {
         bind: {
             html: '{loremIpsum}'
         }
-    }, {
+    },*/ {
         title: 'OSM',
         iconCls: 'fa-map',
         items: [{
