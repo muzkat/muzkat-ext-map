@@ -1,0 +1,29 @@
+{
+  "name": "muzkat_map",
+  "version": "1.0.0",
+  "description": "ExtJs OpenStreetMap / Open Sea Map",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muzkat/muzkatMap.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/muzkat/muzkatMap/issues"
+  },
+  "homepage": "https://github.com/muzkat/muzkatMap#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "leaflet-providers": "^1.1.17"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-watch": "^1.0.0"
+  }
+}
