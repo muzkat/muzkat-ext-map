@@ -1,4 +1,4 @@
-# muzkatMap
+ muzkatMap
 
 ## Universal Map component for ExtJS 6
 
@@ -7,10 +7,10 @@
 
 ### BUILD / RUN
 
-- (install Sencha CMD + download ExtJs)
+- node + npm installed
 - clone repo
-- (you may need to upgrade the app with your ExtJS version) sencha app upgrade ../path/to/framework
-- sencha app watch to run this app
+- npm install
+-
 
 ### LICENCE
 
