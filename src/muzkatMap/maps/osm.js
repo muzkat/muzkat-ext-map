@@ -2,16 +2,30 @@ Ext.define('muzkatMap.maps.osm', {
     extend: 'muzkatMap.baseMap',
     alias: 'widget.muzkatOsmMap',
 
-    lat: 52.5,
-    lng: 13.4,
+    title: 'Open Street / Open Sea Map',
 
-    height: 600,
+    coords: {
+        berlin: {
+            lat: 52.5,
+            lng: 13.4,
+            zoom: 12
+        },
+        trogir: {
+            lat: 43.51561484804046,
+            lng: 16.250463724136356,
+            zoom: 15
+        }
+    },
+
+    defaultCenter: 'trogir',
+
+    // height: 600,
 
     map: undefined, // map reference
 
     listeners: {
         afterrender: function (cmp) {
-            cmp.initMap();
+            cmp.initMap(cmp.coords[cmp.defaultCenter]);
         },
         resize: function (cmp) {
             cmp.reLayoutMap();
@@ -24,21 +38,19 @@ Ext.define('muzkatMap.maps.osm', {
         }
     },
 
-    initMap: function () {
+    initMap: function (loc) {
         var me = this;
         this.setLoading('Map wird geladen...');
         this.loadMapScripts().then(function (success) {
-            console.log('yolo');
             Ext.defer(function () {
                 me.map = L.map(me.body.dom.id, {
-                    center: [me.lat, me.lng],
-                    zoom: 12,
-                    zoomControl: true,
-                    preferCanvas: true
+                    center: [loc.lat, loc.lng],
+                    zoom: loc.zoom,
+                    zoomControl: false,
+                    preferCanvas: false
                 });
 
-                L.tileLayer.provider('OpenStreetMap.Mapnik').addTo(me.map);
-                L.tileLayer.provider('OpenSeaMap').addTo(me.map);
+                me.toggleLayer('OpenStreetMap.BlackAndWhite');
                 me.reLayoutMap();
                 me.setLoading(false);
             }, 1500);
@@ -46,6 +58,23 @@ Ext.define('muzkatMap.maps.osm', {
         }, function (error) {
             console.log('errrror');
         });
+    },
+
+    addTileLayer: function (tileLayer) {
+        this.activeLayers[tileLayer] = L.tileLayer.provider(tileLayer).addTo(this.map);
+    },
+
+    activeLayers: {},
+
+    toggleLayer: function (tileLayer) {
+        if (tileLayer in this.activeLayers) {
+            this.map.removeLayer(this.activeLayers[tileLayer]);
+            delete this.activeLayers[tileLayer];
+            Ext.log('layer ' + tileLayer + ' removed');
+        } else {
+            Ext.log('layer ' + tileLayer + ' added');
+            this.addTileLayer(tileLayer);
+        }
     },
 
     cssPaths: [],
@@ -91,14 +120,32 @@ Ext.define('muzkatMap.maps.osm', {
         xtype: 'toolbar',
         dock: 'bottom',
         items: [{
-            iconCls: 'x-fa fa-plus'
-        },{
-            iconCls: 'x-fa fa-plus'
-        },{
+            iconCls: 'x-fa fa-plus',
+            handler: function (btn) {
+                btn.up('muzkatOsmMap').map.zoomIn();
+            }
+        }, {
+            iconCls: 'x-fa fa-minus',
+            handler: function (btn) {
+                btn.up('muzkatOsmMap').map.zoomOut();
+            }
+        }, {
             xtype: 'tbfill'
-        },{
+        }, {
+            iconCls: 'x-fa fa-map-marker',
+            handler: function (btn) {
+    btn.up('muzkatOsmMap').toggleLayer('Esri.WorldImagery');
+}
+        }, {
+            iconCls: 'x-fa fa-ship',
+            handler: function (btn) {
+                btn.up('muzkatOsmMap').toggleLayer('OpenSeaMap');
+            }
+        }, {
+            xtype: 'tbfill'
+        }, {
             iconCls: 'x-fa fa-reset'
-        },{
+        }, {
             iconCls: 'x-fa fa-cog'
         }]
     }]

@@ -1,25 +1,38 @@
-/**
- * Created by bnz on 1/20/18.
- */
-var appName = 'MuzkatMap';
-var mainComponent = 'muzkatMap';
+var appDescriptor = {
+    name: undefined,
+    mainComponent: undefined
+};
 
-Ext.define(appName + '.MainApplication', {
-    extend: 'Ext.container.Container',
+var app = {
+    appDescriptor: undefined,
+    app: undefined,
+    launchApp: function (descriptor) {
+        this.appDescriptor = descriptor;
+        this.defineBaseClass(appDescriptor.name, appDescriptor.mainComponent);
+        this.start();
+    },
+    defineBaseClass: function (name, mainComponent) {
+        Ext.define(name + '.MainApplication', {
+            extend: 'Ext.container.Container',
+            layout: 'fit',
 
-    layout: 'fit',
-
-    // TODO: dynamic from config
-    items: [{
-        xtype: mainComponent
-    }]
-});
-
-Ext.application({
-    name: appName,
-    mainView: appName + '.MainApplication',
-    launch: function () {
-        Ext.log(appName + ' booted!');
+            items: [{
+                xtype: mainComponent
+            }]
+        });
+    },
+    start: function () {
+        var me = this;
+        this.app = Ext.application({
+            name: me.appDescriptor.name,
+            mainView: me.appDescriptor.name + '.MainApplication',
+            launch: function () {
+                Ext.log(me.appDescriptor.name + ' booted!');
+            }
+        });
     }
-});
+};
 
+appDescriptor.name = 'MuzkatMap';
+appDescriptor.mainComponent = 'muzkatMap';
+app.launchApp(appDescriptor);

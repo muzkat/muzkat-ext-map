@@ -7,5 +7,5 @@ Ext.define('muzkatMap.baseMap', {
 
     region: 'center',
     layout: 'fit',
-    title: 'Map te'
+    title: 'Map'
 });
