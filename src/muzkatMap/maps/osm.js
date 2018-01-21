@@ -2,7 +2,16 @@ Ext.define('muzkatMap.maps.osm', {
     extend: 'muzkatMap.baseMap',
     alias: 'widget.muzkatOsmMap',
 
-    title: 'Open Street / Open Sea Map',
+
+    viewModel: {
+        data: {
+            lastLatLng: 'nothing clicked'
+        }
+    },
+
+    bind: {
+        title: 'Open Street / Open Sea Map - Last click: {lastLatLng}'
+    },
 
     coords: {
         berlin: {
@@ -15,6 +24,25 @@ Ext.define('muzkatMap.maps.osm', {
             lng: 16.250463724136356,
             zoom: 15
         }
+    },
+
+    markers: [{
+        id: 'hotel',
+        desc: 'Bifora Hotel',
+        lat: 43.51386,
+        lng: 16.25036
+    }],
+
+    placeMarkers: function () {
+        var me = this;
+        Ext.Array.each(this.markers, function (markerObj) {
+            me.placeMarker(markerObj);
+        });
+    },
+
+    placeMarker: function (markerObj) {
+        var marker = L.marker([markerObj.lat, markerObj.lng]).addTo(this.map);
+        marker.bindTooltip(markerObj.desc).openTooltip();
     },
 
     defaultCenter: 'trogir',
@@ -38,6 +66,14 @@ Ext.define('muzkatMap.maps.osm', {
         }
     },
 
+    onMapClick: function (e) {
+        var me = this,
+            vm = me.getViewModel(),
+            lastLatLng = e.latlng.toString();
+
+        vm.set('lastLatLng', lastLatLng);
+    },
+
     initMap: function (loc) {
         var me = this;
         this.setLoading('Map wird geladen...');
@@ -52,6 +88,8 @@ Ext.define('muzkatMap.maps.osm', {
 
                 me.toggleLayer('OpenStreetMap.BlackAndWhite');
                 me.reLayoutMap();
+                me.placeMarkers();
+                me.map.on('click', me.onMapClick.bind(me));
                 me.setLoading(false);
             }, 1500);
 
@@ -118,35 +156,45 @@ Ext.define('muzkatMap.maps.osm', {
 
     dockedItems: [{
         xtype: 'toolbar',
-        dock: 'bottom',
+        dock: 'top',
         items: [{
             iconCls: 'x-fa fa-plus',
+            tooltip: 'ZoomIn',
             handler: function (btn) {
                 btn.up('muzkatOsmMap').map.zoomIn();
             }
         }, {
             iconCls: 'x-fa fa-minus',
+            tooltip: 'ZoomOut',
             handler: function (btn) {
                 btn.up('muzkatOsmMap').map.zoomOut();
             }
         }, {
             xtype: 'tbfill'
         }, {
+            iconCls: 'x-fa fa-bullseye',
+            tooltip: 'Map zurücksetzen'
+        }, {
+            iconCls: 'x-fa fa-cog',
+            tooltip: 'Map konfigurieren'
+        }]
+    }, {
+        xtype: 'toolbar',
+        dock: 'bottom',
+        items: [{
             iconCls: 'x-fa fa-map-marker',
+            tooltip: 'Marker ein/ausblenden',
             handler: function (btn) {
-    btn.up('muzkatOsmMap').toggleLayer('Esri.WorldImagery');
-}
+                btn.up('muzkatOsmMap').toggleLayer('Esri.WorldImagery');
+            }
         }, {
             iconCls: 'x-fa fa-ship',
+            tooltip: 'Open Sea Map ein/ausblenden',
             handler: function (btn) {
                 btn.up('muzkatOsmMap').toggleLayer('OpenSeaMap');
             }
         }, {
             xtype: 'tbfill'
-        }, {
-            iconCls: 'x-fa fa-reset'
-        }, {
-            iconCls: 'x-fa fa-cog'
         }]
     }]
 });
