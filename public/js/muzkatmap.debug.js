@@ -192,9 +192,9 @@ Ext.define('muzkatMap.maps.osm', {
 
     cssPaths: [],
     scriptPaths: [
-        'http://unpkg.com/leaflet@1.0.3/dist/leaflet.css',
-        'http://unpkg.com/leaflet@1.0.3/dist/leaflet.js',
-        '/leaflet-providers.js'
+        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css',
+        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/leaflet-providers/1.1.17/leaflet-providers.js'
     ],
 
     loadMapScripts: function () {
@@ -220,7 +220,7 @@ Ext.define('muzkatMap.maps.osm', {
                 url: url,
                 onLoad: function () {
                     console.log(url + ' was loaded successfully');
-                    resolve('Loading was successful');
+                    resolve();
                 },
                 onError: function (error) {
                     reject('Loading was not successful for: ' + url);
