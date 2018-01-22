@@ -9,7 +9,7 @@ Ext.define('muzkatMap.muzkatMap', {
     title: 'ExtJs Universal Map component by muzkat',
 
     items: [
-        {xtype: 'muzkatOsmMap'}
+        {xtype: 'muzkatOsm'}
     ]
 
 });

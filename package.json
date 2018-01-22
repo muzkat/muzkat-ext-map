@@ -5,24 +5,29 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "buildMap": "grunt concat",
+    "buildApp": "npm run buildMap && npm run bundle",
+    "bundle": "browserify src/app/wrapper.js -o public/js/bundle.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/muzkat/muzkatMap.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Erik Woitschig",
   "bugs": {
     "url": "https://github.com/muzkat/muzkatMap/issues"
   },
   "homepage": "https://github.com/muzkat/muzkatMap#readme",
   "dependencies": {
     "express": "^4.16.2",
-    "leaflet-providers": "^1.1.17"
+    "leaflet-providers": "^1.1.17",
+    "muzkat-ext-app": "^1.0.2"
   },
   "devDependencies": {
+    "browserify": "^15.2.0",
     "grunt": "^1.0.1",
+    "grunt-browserify": "^5.2.0",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-watch": "^1.0.0",
     "webpack": "^3.10.0"

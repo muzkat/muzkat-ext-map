@@ -9,6 +9,8 @@ Ext.define('muzkatMap.maps.osm', {
         }
     },
 
+    header: false,
+
     bind: {
         title: 'Open Street / Open Sea Map - Last click: {lastLatLng}'
     },
@@ -43,11 +45,12 @@ Ext.define('muzkatMap.maps.osm', {
     placeMarker: function (markerObj) {
         var marker = L.marker([markerObj.lat, markerObj.lng]).addTo(this.map);
         marker.bindTooltip(markerObj.desc).openTooltip();
+        markerObj.type = 'marker';
+        markerObj.ref = marker;
+        this.up('muzkatOsm').addMarker(markerObj);
     },
 
     defaultCenter: 'trogir',
-
-    // height: 600,
 
     map: undefined, // map reference
 
@@ -74,6 +77,22 @@ Ext.define('muzkatMap.maps.osm', {
         vm.set('lastLatLng', lastLatLng);
     },
 
+    onMapContextmenu: function (e) {
+        var xy = [100, 100];
+        if (e.originalEvent) {
+            xy[0] = e.originalEvent.clientX;
+            xy[1] = e.originalEvent.clientY;
+        }
+
+        var position = xy;
+        var m = Ext.createByAlias('widget.muzkatOsmCm', {
+            parentCmpReference: this,
+            mapEventReference: e
+        });
+
+        m.showAt(position);
+    },
+
     initMap: function (loc) {
         var me = this;
         this.setLoading('Map wird geladen...');
@@ -90,6 +109,7 @@ Ext.define('muzkatMap.maps.osm', {
                 me.reLayoutMap();
                 me.placeMarkers();
                 me.map.on('click', me.onMapClick.bind(me));
+                me.map.on('contextmenu', me.onMapContextmenu.bind(me));
                 me.setLoading(false);
             }, 1500);
 
@@ -154,6 +174,21 @@ Ext.define('muzkatMap.maps.osm', {
         });
     },
 
+    getMapInfo: function () {
+        var array = [];
+        array.push(
+            {key: 'Map Center', value: this.getMapCenter().toString()},
+            {key: 'Map Zoom', value: this.map.getZoom()},
+            {key: 'Zoom Max', value: this.map.getMaxZoom()},
+            {key: 'Zoom Min', value: this.map.getMinZoom()},
+            {key: 'Map Bounds', value: JSON.stringify(this.map.getBounds())});
+        return array;
+    },
+
+    getMapCenter: function () {
+        return this.map.getCenter();
+    },
+
     dockedItems: [{
         xtype: 'toolbar',
         dock: 'top',
@@ -170,10 +205,39 @@ Ext.define('muzkatMap.maps.osm', {
                 btn.up('muzkatOsmMap').map.zoomOut();
             }
         }, {
+            value: 'Map Controls',
+            xtype: 'displayfield'
+        }, {
             xtype: 'tbfill'
+        }, {
+            value: 'Map Settings',
+            xtype: 'displayfield'
         }, {
             iconCls: 'x-fa fa-bullseye',
             tooltip: 'Map zurücksetzen'
+        }, {
+            iconCls: 'x-fa fa-info',
+            listeners: {
+                'render': function (cmp) {
+                    Ext.create({
+                        xtype: 'tooltip',
+                        target: cmp.getEl(),
+                        listeners: {
+                            scope: this,
+                            beforeshow: function (tip) {
+                                var infoArray = cmp.up('muzkatOsmMap').getMapInfo();
+                                var html = '<table>';
+                                Ext.Array.each(infoArray, function (item) {
+                                    html += '<tr><td>' + item.key + '</td>' + '<td>' + item.value + '</td></tr>';
+                                });
+                                html += '<tr><td> Uhrzeit </td>' + '<td>' + new Date().toTimeString() + '</td></tr>';
+                                html += '</table>';
+                                tip.setHtml(html);
+                            }
+                        }
+                    });
+                }
+            }
         }, {
             iconCls: 'x-fa fa-cog',
             tooltip: 'Map konfigurieren'
@@ -185,6 +249,20 @@ Ext.define('muzkatMap.maps.osm', {
             iconCls: 'x-fa fa-map-marker',
             tooltip: 'Marker ein/ausblenden',
             handler: function (btn) {
+                // btn.up('muzkatOsmMap').toggleLayer('Esri.WorldImagery');
+            }
+        }, {
+            value: 'Map Interaktionen',
+            xtype: 'displayfield'
+        }, {
+            xtype: 'tbfill'
+        }, {
+            value: 'Map Layer',
+            xtype: 'displayfield'
+        }, {
+            iconCls: 'x-fa fa-map',
+            tooltip: 'Bildkarte einblenden',
+            handler: function (btn) {
                 btn.up('muzkatOsmMap').toggleLayer('Esri.WorldImagery');
             }
         }, {
@@ -193,8 +271,6 @@ Ext.define('muzkatMap.maps.osm', {
             handler: function (btn) {
                 btn.up('muzkatOsmMap').toggleLayer('OpenSeaMap');
             }
-        }, {
-            xtype: 'tbfill'
         }]
     }]
 });

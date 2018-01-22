@@ -1,11 +1,7 @@
-/**
- * Created by bnz on 30.07.17
- */
 module.exports = function (grunt) {
 
     var projectRoot = 'src/';
 
-// config
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         concat: {
@@ -14,14 +10,13 @@ module.exports = function (grunt) {
              // separator: ';',
              },
              */
-            app: {
-                src: [projectRoot + 'app/app.js'],
-                dest: 'public/js/app.debug.js'
-            },
-            extras: {
+            map: {
                 src: [
+                    projectRoot + 'muzkatMap/contextmenu/**/*.js',
                     projectRoot + 'muzkatMap/basemap.js',
-                    projectRoot + 'muzkatMap/maps/osm.js',
+                    projectRoot + 'muzkatMap/maps/**/*.js',
+                    projectRoot + 'muzkatMap/mapDetails.js',
+                    projectRoot + 'muzkatMap/muzkatosm.js',
                     projectRoot + 'muzkatMap/muzkatmap.js'
                 ],
                 dest: 'public/js/muzkatmap.debug.js'
@@ -29,21 +24,40 @@ module.exports = function (grunt) {
         },
         watch: {
             scripts: {
-                files: ['src/**/*.js'],
-                tasks: ['concat'],
+                files: ['src/**/*.js', 'public/**/*.html'],
+                tasks: ['concat', 'dev'],
                 options: {
                     spawn: false,
                     livereload: true
                 }
             }
+        },
+
+
+        browserify : {
+            dev : {
+                src : ['src/app/**/*.js'],
+                dest : './public/js/bundle.js',
+                options : {
+                   // watch : true, // use watchify for incremental builds!
+                  //  keepAlive : true, // watchify will exit unless task is kept alive
+                    browserifyOptions : {
+                        debug : true // source mapping
+                    }
+                }
+            },
+            dist : {
+                src : ["<%= paths.src %>"],
+                dest : "<%= paths.dest %>"
+            }
         }
     });
 
-// plugins used
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-browserify');
 
-// default tasks
-    grunt.registerTask('default', ['concat','watch']);
 
+    grunt.registerTask("dev", ["browserify:dev"]);
+    grunt.registerTask('default', ['concat', 'watch']);
 };
