@@ -1,6 +1,6 @@
 {
   "name": "muzkat-ext-map",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ExtJs OpenStreetMap / Open Sea Map",
   "main": "index.js",
   "scripts": {
@@ -12,13 +12,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/muzkat/muzkatMap.git"
+    "url": "git+https://github.com/muzkat/muzkat-ext-map.git"
   },
   "author": "Erik Woitschig",
   "bugs": {
-    "url": "https://github.com/muzkat/muzkatMap/issues"
+    "url": "https://github.com/muzkat/muzkat-ext-map/issues"
   },
-  "homepage": "https://github.com/muzkat/muzkatMap#readme",
+  "homepage": "https://github.com/muzkat/muzkat-ext-map#readme",
   "dependencies": {
     "muzkat-ext-app": "^1.0.2"
   },
