@@ -1,5 +1,5 @@
 {
-  "name": "muzkat_map",
+  "name": "muzkat-ext-map",
   "version": "1.0.0",
   "description": "ExtJs OpenStreetMap / Open Sea Map",
   "main": "index.js",
@@ -20,11 +20,10 @@
   },
   "homepage": "https://github.com/muzkat/muzkatMap#readme",
   "dependencies": {
-    "express": "^4.16.2",
-    "leaflet-providers": "^1.1.17",
     "muzkat-ext-app": "^1.0.2"
   },
   "devDependencies": {
+    "express": "^4.16.2",
     "browserify": "^15.2.0",
     "grunt": "^1.0.1",
     "grunt-browserify": "^5.2.0",
