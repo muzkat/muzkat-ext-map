@@ -139,7 +139,7 @@ Ext.define('muzkatMap.maps.osm', {
     scriptPaths: [
         'http://unpkg.com/leaflet@1.0.3/dist/leaflet.css',
         'http://unpkg.com/leaflet@1.0.3/dist/leaflet.js',
-        '/leaflet-providers.js'
+        '../leaflet-providers.js'
     ],
 
     loadMapScripts: function () {
