@@ -7,6 +7,7 @@ module.exports = function (grunt) {
         concat: {
             map: {
                 src: [
+                    projectRoot + 'muzkatMap/Module.js',
                     projectRoot + 'muzkatMap/contextmenu/**/*.js',
                     projectRoot + 'muzkatMap/basemap.js',
                     projectRoot + 'muzkatMap/maps/**/*.js',

@@ -1,3 +1,51 @@
+Ext.define('muzkatMap.Module', {
+    singleton: true,
+
+    loadAssets: function () {
+        return this.loadMapScripts();
+    },
+
+    filesLoaded: false,
+
+    scriptPaths: [
+        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css',
+        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/leaflet-providers/1.1.17/leaflet-providers.js'
+    ],
+
+    loadMapScripts: function () {
+        var loadingArray = [], me = this;
+        return new Ext.Promise(function (resolve, reject) {
+            Ext.Array.each(me.scriptPaths, function (url) {
+                loadingArray.push(me.loadMapScript(url));
+            });
+
+            Ext.Promise.all(loadingArray).then(function (success) {
+                    console.log('artefacts were loaded successfully');
+                    resolve('Loading was successful');
+                },
+                function (error) {
+                    reject('Error during artefact loading...');
+                });
+        });
+    },
+
+    loadMapScript: function (url) {
+        return new Ext.Promise(function (resolve, reject) {
+            Ext.Loader.loadScript({
+                url: url,
+                onLoad: function () {
+                    console.log(url + ' was loaded successfully');
+                    resolve();
+                },
+                onError: function (error) {
+                    reject('Loading was not successful for: ' + url);
+                }
+            });
+        });
+    }
+
+});
 /**
  * Created by bnz on 1/21/18.
  */
@@ -148,29 +196,41 @@ Ext.define('muzkatMap.maps.osm', {
         m.showAt(position);
     },
 
+    addMapToCmp: function (loc) {
+        var me = this;
+        me.map = L.map(me.body.dom.id, {
+            center: [loc.lat, loc.lng],
+            zoom: loc.zoom,
+            zoomControl: false,
+            preferCanvas: false
+        });
+
+        me.toggleLayer('OpenStreetMap.BlackAndWhite');
+        me.reLayoutMap();
+        me.placeMarkers();
+        me.map.on('click', me.onMapClick.bind(me));
+        me.map.on('contextmenu', me.onMapContextmenu.bind(me));
+        me.setLoading(false);
+    },
+
     initMap: function (loc) {
         var me = this;
         this.setLoading('Map wird geladen...');
-        this.loadMapScripts().then(function (success) {
-            Ext.defer(function () {
-                me.map = L.map(me.body.dom.id, {
-                    center: [loc.lat, loc.lng],
-                    zoom: loc.zoom,
-                    zoomControl: false,
-                    preferCanvas: false
-                });
+        if (!muzkatMap.Module.filesLoaded) {
+            muzkatMap.Module.loadAssets().then(function (success) {
+                muzkatMap.Module.filesLoaded = true;
+                Ext.defer(function () {
+                    me.addMapToCmp(loc);
+                }, 1500);
 
-                me.toggleLayer('OpenStreetMap.BlackAndWhite');
-                me.reLayoutMap();
-                me.placeMarkers();
-                me.map.on('click', me.onMapClick.bind(me));
-                me.map.on('contextmenu', me.onMapContextmenu.bind(me));
-                me.setLoading(false);
-            }, 1500);
+            }, function (error) {
+                console.log('errrror');
+            });
+        } else {
+            Ext.log({msg: 'Asset loading skipped...'});
+            me.addMapToCmp(loc);
+        }
 
-        }, function (error) {
-            console.log('errrror');
-        });
     },
 
     addTileLayer: function (tileLayer) {
@@ -191,43 +251,6 @@ Ext.define('muzkatMap.maps.osm', {
     },
 
     cssPaths: [],
-    scriptPaths: [
-        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css',
-        'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js',
-        'https://cdnjs.cloudflare.com/ajax/libs/leaflet-providers/1.1.17/leaflet-providers.js'
-    ],
-
-    loadMapScripts: function () {
-        var loadingArray = [], me = this;
-        return new Ext.Promise(function (resolve, reject) {
-            Ext.Array.each(me.scriptPaths, function (url) {
-                loadingArray.push(me.loadMapScript(url));
-            });
-
-            Ext.Promise.all(loadingArray).then(function (success) {
-                    console.log('artefacts were loaded successfully');
-                    resolve('Loading was successful');
-                },
-                function (error) {
-                    reject('Error during artefact loading...');
-                });
-        });
-    },
-
-    loadMapScript: function (url) {
-        return new Ext.Promise(function (resolve, reject) {
-            Ext.Loader.loadScript({
-                url: url,
-                onLoad: function () {
-                    console.log(url + ' was loaded successfully');
-                    resolve();
-                },
-                onError: function (error) {
-                    reject('Loading was not successful for: ' + url);
-                }
-            });
-        });
-    },
 
     getMapInfo: function () {
         var array = [];
