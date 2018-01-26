@@ -7,9 +7,19 @@ Ext.define('muzkatMap.muzkatMap', {
 
     layout: 'fit',
     title: 'ExtJs Universal Map component by muzkat',
+    header: true,
+    hideDetails: false,
 
-    items: [
-        {xtype: 'muzkatOsm'}
-    ]
+    initComponent: function () {
 
+        this.items = [
+            {
+                xtype: 'muzkatOsm',
+                header: this.header,
+                hideDetails: this.hideDetails
+            }
+        ];
+
+        this.callParent(arguments);
+    }
 });

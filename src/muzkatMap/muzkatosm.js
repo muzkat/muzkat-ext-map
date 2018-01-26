@@ -11,10 +11,16 @@ Ext.define('muzkatMap.muzkatosm', {
     },
     title: 'Muzkat Open Street Map',
 
-    items: [
-        {xtype: 'muzkatMapDetails', flex:1},
-        {xtype: 'muzkatOsmMap', flex: 5}
-    ],
+    hideDetails: undefined, // set by constructor - default: false
+
+    initComponent: function () {
+        this.items =
+            [
+                {xtype: 'muzkatMapDetails', flex: 1, hidden: this.hideDetails},
+                {xtype: 'muzkatOsmMap', flex: 5}
+            ];
+        this.callParent(arguments);
+    },
 
     addMarker: function (markerObj) {
         this.down('muzkatMapDetails').addMarkerToStore(markerObj);
