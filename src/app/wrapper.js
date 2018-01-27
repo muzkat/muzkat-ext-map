@@ -1,3 +1,3 @@
 var muzkatApp = require('muzkat-ext-app');
-var pt = new muzkatApp('MuzkatMap', 'muzkatMap', false);
+var pt = new muzkatApp('MuzkatMap', 'muzkatTest', false);
 pt.launchApp();

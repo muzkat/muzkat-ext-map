@@ -14,7 +14,8 @@ module.exports = function (grunt) {
                     projectRoot + 'muzkatMap/mapDetails.js',
                     projectRoot + 'muzkatMap/muzkatosm.js',
                     projectRoot + 'muzkatMap/muzkatmap.js',
-                    projectRoot + 'muzkatMap/muzkatmapwidget.js'
+                    projectRoot + 'muzkatMap/muzkatmapwidget.js',
+                    projectRoot + 'test/test.js'
                 ],
                 dest: 'public/js/muzkatmap.debug.js'
             }

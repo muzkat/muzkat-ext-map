@@ -95,14 +95,19 @@ Ext.define('muzkatMap.maps.osm', {
 
     addMapToCmp: function (loc) {
         var me = this;
+
+        var tileLayer = 'OpenStreetMap.BlackAndWhite';
+        var layer = L.tileLayer.provider(tileLayer);
+
         me.map = L.map(me.body.dom.id, {
             center: [loc.lat, loc.lng],
             zoom: loc.zoom,
             zoomControl: false,
-            preferCanvas: false
+            preferCanvas: false,
+            layers: [layer]
         });
 
-        me.toggleLayer('OpenStreetMap.BlackAndWhite');
+        // me.toggleLayer('OpenStreetMap.BlackAndWhite');
         me.reLayoutMap();
         me.placeMarkers();
         me.map.on('click', me.onMapClick.bind(me));
