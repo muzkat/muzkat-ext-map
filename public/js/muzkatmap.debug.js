@@ -164,6 +164,12 @@ Ext.define('muzkatMap.maps.osm', {
             if (Ext.isDefined(cmp.point)) {
                 cmp.coords[cmp.defaultCenter] = cmp.point;
                 cmp.coords[cmp.defaultCenter]['zoom'] = 12;
+                cmp.markers = [{
+                    id: 'tbd',
+                    desc: cmp.defaultCenter,
+                    lat: cmp.point.lat,
+                    lng: cmp.point.lng
+                }];
             }
             cmp.initMap(cmp.coords[cmp.defaultCenter]);
         },
