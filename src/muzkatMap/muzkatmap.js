@@ -9,12 +9,14 @@ Ext.define('muzkatMap.muzkatMap', {
     title: 'ExtJs Universal Map component by muzkat',
     header: true,
     hideDetails: false,
+    defaultCenter: 'berlin',
 
     initComponent: function () {
 
         this.items = [
             {
                 xtype: 'muzkatOsm',
+                defaultCenter: this.defaultCenter,
                 header: this.header,
                 hideDetails: this.hideDetails
             }
