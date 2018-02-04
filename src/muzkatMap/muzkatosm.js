@@ -13,12 +13,13 @@ Ext.define('muzkatMap.muzkatosm', {
 
     hideDetails: undefined, // set by constructor - default: false
     defaultCenter: undefined,
+    point: undefined,
 
     initComponent: function () {
         this.items =
             [
                 {xtype: 'muzkatMapDetails', flex: 1, hidden: this.hideDetails},
-                {xtype: 'muzkatOsmMap', flex: 5, defaultCenter: this.defaultCenter}
+                {xtype: 'muzkatOsmMap', flex: 5, defaultCenter: this.defaultCenter, point: this.point}
             ];
         this.callParent(arguments);
     },

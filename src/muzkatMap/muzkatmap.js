@@ -10,6 +10,7 @@ Ext.define('muzkatMap.muzkatMap', {
     header: true,
     hideDetails: false,
     defaultCenter: 'berlin',
+    point: undefined,
 
     initComponent: function () {
 
@@ -18,7 +19,8 @@ Ext.define('muzkatMap.muzkatMap', {
                 xtype: 'muzkatOsm',
                 defaultCenter: this.defaultCenter,
                 header: this.header,
-                hideDetails: this.hideDetails
+                hideDetails: this.hideDetails,
+                point: this.point
             }
         ];
 

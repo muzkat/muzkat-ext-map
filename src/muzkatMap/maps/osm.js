@@ -35,6 +35,8 @@ Ext.define('muzkatMap.maps.osm', {
         lng: 16.25036
     }],
 
+    point: undefined,
+
     placeMarkers: function () {
         var me = this;
         Ext.Array.each(this.markers, function (markerObj) {
@@ -56,6 +58,10 @@ Ext.define('muzkatMap.maps.osm', {
 
     listeners: {
         afterrender: function (cmp) {
+            if (Ext.isDefined(cmp.point)) {
+                cmp.coords[cmp.defaultCenter] = cmp.point;
+                cmp.coords[cmp.defaultCenter]['zoom'] = 12;
+            }
             cmp.initMap(cmp.coords[cmp.defaultCenter]);
         },
         resize: function (cmp) {

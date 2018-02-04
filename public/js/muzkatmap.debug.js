@@ -138,6 +138,8 @@ Ext.define('muzkatMap.maps.osm', {
         lng: 16.25036
     }],
 
+    point: undefined,
+
     placeMarkers: function () {
         var me = this;
         Ext.Array.each(this.markers, function (markerObj) {
@@ -159,6 +161,10 @@ Ext.define('muzkatMap.maps.osm', {
 
     listeners: {
         afterrender: function (cmp) {
+            if (Ext.isDefined(cmp.point)) {
+                cmp.coords[cmp.defaultCenter] = cmp.point;
+                cmp.coords[cmp.defaultCenter]['zoom'] = 12;
+            }
             cmp.initMap(cmp.coords[cmp.defaultCenter]);
         },
         resize: function (cmp) {
@@ -465,12 +471,13 @@ Ext.define('muzkatMap.muzkatosm', {
 
     hideDetails: undefined, // set by constructor - default: false
     defaultCenter: undefined,
+    point: undefined,
 
     initComponent: function () {
         this.items =
             [
                 {xtype: 'muzkatMapDetails', flex: 1, hidden: this.hideDetails},
-                {xtype: 'muzkatOsmMap', flex: 5, defaultCenter: this.defaultCenter}
+                {xtype: 'muzkatOsmMap', flex: 5, defaultCenter: this.defaultCenter, point: this.point}
             ];
         this.callParent(arguments);
     },
@@ -496,6 +503,7 @@ Ext.define('muzkatMap.muzkatMap', {
     header: true,
     hideDetails: false,
     defaultCenter: 'berlin',
+    point: undefined,
 
     initComponent: function () {
 
@@ -504,7 +512,8 @@ Ext.define('muzkatMap.muzkatMap', {
                 xtype: 'muzkatOsm',
                 defaultCenter: this.defaultCenter,
                 header: this.header,
-                hideDetails: this.hideDetails
+                hideDetails: this.hideDetails,
+                point: this.point
             }
         ];
 
