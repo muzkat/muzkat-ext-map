@@ -464,12 +464,13 @@ Ext.define('muzkatMap.muzkatosm', {
     title: 'Muzkat Open Street Map',
 
     hideDetails: undefined, // set by constructor - default: false
+    defaultCenter: undefined,
 
     initComponent: function () {
         this.items =
             [
                 {xtype: 'muzkatMapDetails', flex: 1, hidden: this.hideDetails},
-                {xtype: 'muzkatOsmMap', flex: 5}
+                {xtype: 'muzkatOsmMap', flex: 5, defaultCenter: this.defaultCenter}
             ];
         this.callParent(arguments);
     },
