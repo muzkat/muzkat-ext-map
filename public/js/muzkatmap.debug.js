@@ -198,8 +198,10 @@ Ext.define('muzkatMap.maps.osm', {
 
     addMapToCmp: function (loc) {
         var me = this;
+
         var tileLayer = 'OpenStreetMap.BlackAndWhite';
         var layer = L.tileLayer.provider(tileLayer);
+
         me.map = L.map(me.body.dom.id, {
             center: [loc.lat, loc.lng],
             zoom: loc.zoom,
@@ -492,12 +494,14 @@ Ext.define('muzkatMap.muzkatMap', {
     title: 'ExtJs Universal Map component by muzkat',
     header: true,
     hideDetails: false,
+    defaultCenter: 'berlin',
 
     initComponent: function () {
 
         this.items = [
             {
                 xtype: 'muzkatOsm',
+                defaultCenter: this.defaultCenter,
                 header: this.header,
                 hideDetails: this.hideDetails
             }
